@@ -1,0 +1,21 @@
+
+module postfix-dspam-interop 1.0;
+
+require {
+	type dspam_var_run_t;
+	type postfix_smtp_t;
+	type dovecot_var_run_t;
+	type dspam_t;
+	class sock_file write;
+	class unix_stream_socket connectto;
+	class dir search;
+}
+
+#============= dspam_t ==============
+allow dspam_t dovecot_var_run_t:dir search;
+allow dspam_t dovecot_var_run_t:sock_file write;
+
+#============= postfix_smtp_t ==============
+allow postfix_smtp_t dspam_t:unix_stream_socket connectto;
+allow postfix_smtp_t dspam_var_run_t:dir search;
+allow postfix_smtp_t dspam_var_run_t:sock_file write;
